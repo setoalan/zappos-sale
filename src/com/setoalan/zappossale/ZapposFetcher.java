@@ -2,6 +2,7 @@ package com.setoalan.zappossale;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
 import android.util.Log;
@@ -22,8 +25,10 @@ public class ZapposFetcher {
 	private static final String URL = "http://api.zappos.com/Product/";
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
 	
-	public Void fetchItems()  {
-		String url = Uri.parse(URL + "7515478?").buildUpon()
+	private ArrayList<ZapposProduct> mProducts = new ArrayList<ZapposProduct>();
+	
+	public ArrayList<ZapposProduct> fetchItems()  {
+		String url = Uri.parse(URL + "7515478" + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
@@ -46,7 +51,7 @@ public class ZapposFetcher {
 				try {
 					response.getEntity().writeTo(out);
 					result = out.toString();
-					Log.i(TAG, result);
+					//Log.i(TAG, result);
 				} finally {
 					out.close();
 				}
@@ -60,6 +65,36 @@ public class ZapposFetcher {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return deserialize(result);
 	}
+
+	private ArrayList<ZapposProduct> deserialize(String result) {
+		try {
+			ZapposProduct mZP;
+					
+			JSONObject obj = new JSONObject(result);
+			
+			for (int i=0; i<obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").length(); i++) {
+				mZP = new ZapposProduct();
+				
+				String productId = obj.getJSONArray("product").getJSONObject(0).getString("productId");
+				String brandName = obj.getJSONArray("product").getJSONObject(0).getString("brandName");
+				String productName = obj.getJSONArray("product").getJSONObject(0).getString("productName");
+				String styleId = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("styleId");
+				String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("percentOff");
+			
+				mZP.setProductId(productId);
+				mZP.setBrandName(brandName);
+				mZP.setProductName(productName);
+				mZP.setStyleId(styleId);
+				mZP.setPercentOff(percentOff);
+				
+				mProducts.add(mZP);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return mProducts;
+	}
+	
 }

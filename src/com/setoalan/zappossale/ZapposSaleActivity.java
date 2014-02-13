@@ -1,5 +1,7 @@
 package com.setoalan.zappossale;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.widget.EditText;
 
 public class ZapposSaleActivity extends Activity {
 
+	private ArrayList<ZapposProduct> mProducts;
+	
 	EditText mProduct;
 	Button mSearch;
 	
@@ -17,6 +21,8 @@ public class ZapposSaleActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_zappos_sale);
+		
+		mProducts = new ArrayList<ZapposProduct>();
 		
 		mProduct = (EditText) findViewById(R.id.product);
 		mSearch = (Button) findViewById(R.id.search);
@@ -28,11 +34,16 @@ public class ZapposSaleActivity extends Activity {
 		});
 	}
 	
-	private class FetchItemsTask extends AsyncTask<Void, Void, Void> {
+	private class FetchItemsTask extends AsyncTask<Void, Void, ArrayList<ZapposProduct>> {
 		
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected ArrayList<ZapposProduct> doInBackground(Void... params) {
 			return new ZapposFetcher().fetchItems();
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<ZapposProduct> result) {
+			mProducts = result;
 		}
 		
 	}
