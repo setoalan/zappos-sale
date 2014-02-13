@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ZapposSale</string>
+    <string name="action_settings">Settings</string>
+    <string name="enter">Please enter a productID or productName.</string>
+    <string name="search">Search Item</string>
+
+</resources>
