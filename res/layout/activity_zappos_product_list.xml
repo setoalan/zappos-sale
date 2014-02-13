@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <fragment 
+	<fragment 
         android:id="@+id/zapposFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.setoalan.zappossale.ZapposSaleFragment" />
+        class="com.setoalan.zappossale.ZapposProductListFragment" />
 
 </LinearLayout>

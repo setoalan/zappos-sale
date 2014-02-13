@@ -1,12 +1,14 @@
 package com.setoalan.zappossale;
 
-public class ZapposProduct {
+
+public class Product {
 
 	private String mProductId;
 	private String mBrandName;
 	private String mProductName;
 	private String mStyleId;
 	private String mPercentOff;
+	private String mImageUrl;
 	
 	public String getProductId() {
 		return mProductId;
@@ -46,6 +48,14 @@ public class ZapposProduct {
 	
 	public void setPercentOff(String percentOff) {
 		mPercentOff = percentOff;
+	}
+
+	public String getImageUrl() {
+		return mImageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		mImageUrl = imageUrl;
 	}
 	
 }

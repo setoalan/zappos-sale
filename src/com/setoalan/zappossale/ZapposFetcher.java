@@ -25,9 +25,9 @@ public class ZapposFetcher {
 	private static final String URL = "http://api.zappos.com/Product/";
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
 	
-	private ArrayList<ZapposProduct> mProducts = new ArrayList<ZapposProduct>();
+	private ArrayList<Product> mProducts = new ArrayList<Product>();
 	
-	public ArrayList<ZapposProduct> fetchItems()  {
+	public ArrayList<Product> fetchItems()  {
 		String url = Uri.parse(URL + "7515478" + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
@@ -68,26 +68,28 @@ public class ZapposFetcher {
 		return deserialize(result);
 	}
 
-	private ArrayList<ZapposProduct> deserialize(String result) {
+	private ArrayList<Product> deserialize(String result) {
 		try {
-			ZapposProduct mZP;
+			Product mZP;
 					
 			JSONObject obj = new JSONObject(result);
 			
 			for (int i=0; i<obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").length(); i++) {
-				mZP = new ZapposProduct();
+				mZP = new Product();
 				
 				String productId = obj.getJSONArray("product").getJSONObject(0).getString("productId");
 				String brandName = obj.getJSONArray("product").getJSONObject(0).getString("brandName");
 				String productName = obj.getJSONArray("product").getJSONObject(0).getString("productName");
 				String styleId = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("styleId");
 				String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("percentOff");
+				String imageUrl = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("imageUrl");
 			
 				mZP.setProductId(productId);
 				mZP.setBrandName(brandName);
 				mZP.setProductName(productName);
 				mZP.setStyleId(styleId);
 				mZP.setPercentOff(percentOff);
+				mZP.setImageUrl(imageUrl);
 				
 				mProducts.add(mZP);
 			}
