@@ -6,7 +6,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,15 +18,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ZapposProductListFragment extends ListFragment {
+	
+	public static final String PREF_SALE = "sale";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ZapposAdapter adapter = new ZapposAdapter(ZapposSaleFragment.mProducts);
 		setListAdapter(adapter);
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Would you like to get a notification when this " +
+				"product is 20% off or more?");
+		builder.setPositiveButton("Yes", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Toast.makeText(getActivity(), "YES", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(getActivity(), ProductService.class);
+				getActivity().startService(i);
+			}
+		});
+		builder.setNegativeButton("Cancel", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 	
 	private class ZapposAdapter extends ArrayAdapter<Product> {
