@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class ItemFetcher {
@@ -75,6 +76,12 @@ public class ItemFetcher {
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
 				Log.i(TAG, "SEND EMAIL");
 				// Send email & turn off alarmManager
+				if (ProductService.am == null || ProductService.pi == null) return null;
+				ProductService.am.cancel(ProductService.pi);
+				ProductService.pi.cancel();
+				
+				new EmailTask().execute();
+				
 			} else {
 				Log.i(TAG, "NOT ON SALE");
 				// Do nothing
@@ -83,6 +90,15 @@ public class ItemFetcher {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private class EmailTask extends AsyncTask<Void, Void, Void> {
+		
+		@Override
+		protected Void doInBackground(Void... params) {					
+			return new EmailSender().initalize();
+		}
+		
 	}
 
 }

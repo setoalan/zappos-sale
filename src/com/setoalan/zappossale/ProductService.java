@@ -12,7 +12,10 @@ import android.util.Log;
 public class ProductService extends IntentService {
 
 	private static final String TAG = "ProductService";
-	private static final int POLL_INTERVAL = 1000 * 10; // 60 seconds	
+	private static final int POLL_INTERVAL = 1000 * 10; // 60 seconds
+	
+	public static AlarmManager am;
+	public static PendingIntent pi;
 	
 	public ProductService() {
 		super(TAG);
@@ -40,9 +43,9 @@ public class ProductService extends IntentService {
 	
 	public static void setServiceAlarm(Context context) {
 		Intent i  = new Intent(context, ProductService.class);
-		PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+		pi = PendingIntent.getService(context, 0, i, 0);
 		
-		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		
 		am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), POLL_INTERVAL, pi);
 	}
