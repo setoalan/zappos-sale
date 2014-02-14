@@ -5,15 +5,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -43,11 +40,6 @@ public class ZapposProductListFragment extends ListFragment {
 		sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 		productId = sharedPref.getString("productId", null);
 		styleId = sharedPref.getString("styleId", null);
-		if (productId == null || styleId == null) {
-			Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(getActivity(), productId + " " + styleId,  Toast.LENGTH_SHORT).show();
-		}
 	}
 	
 	@Override
@@ -58,10 +50,28 @@ public class ZapposProductListFragment extends ListFragment {
 		builder.setPositiveButton("Yes", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				editor = sharedPref.edit();
-				editor.putString("productId", ZapposSaleFragment.mProducts.get(position).getProductId());
-				editor.putString("styleId", ZapposSaleFragment.mProducts.get(position).getStyleId());
-				editor.commit();
+				if (productId == null || styleId == null) {
+					Toast.makeText(getActivity(), "New Saved", Toast.LENGTH_SHORT).show();
+				} else {
+					AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+					builder2.setTitle("Are you sure you want to override current saved product?");
+					builder2.setPositiveButton("Yes", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Toast.makeText(getActivity(), "Saved: " + productId + " " + styleId,  Toast.LENGTH_SHORT).show();
+							editor = sharedPref.edit();
+							editor.putString("productId", ZapposSaleFragment.mProducts.get(position).getProductId());
+							editor.putString("styleId", ZapposSaleFragment.mProducts.get(position).getStyleId());
+							editor.commit();
+						}
+					});
+					builder2.setNegativeButton("NO", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {}
+					});
+					AlertDialog dialog2 = builder2.create();
+					dialog2.show();
+				}
 				//Intent i = new Intent(getActivity(), ProductService.class);
 				//getActivity().startService(i);
 			}
