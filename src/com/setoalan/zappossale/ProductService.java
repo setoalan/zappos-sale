@@ -6,12 +6,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class ProductService extends IntentService {
 
 	private static final String TAG = "ProductService";
-	private static final int POLL_INTERVAL = 1000 * 60; // 60 seconds	
+	private static final int POLL_INTERVAL = 1000 * 10; // 60 seconds	
 	
 	public ProductService() {
 		super(TAG);
@@ -22,12 +23,19 @@ public class ProductService extends IntentService {
 		ConnectivityManager cm = (ConnectivityManager)
 				getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (cm.getActiveNetworkInfo() == null) return;
-		String productId = ZapposProductListFragment.productId;
-		String styleId = ZapposProductListFragment.styleId;
 		
 		Log.i(TAG, "Received an intent: " + intent);
 		
-		// do a check against service
+		new FetchItemTask().execute();
+	}
+	
+	private class FetchItemTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			return new ItemFetcher().fetchItems();
+		}
+		
 	}
 	
 	public static void setServiceAlarm(Context context) {

@@ -11,7 +11,6 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -62,7 +61,8 @@ public class ZapposProductListFragment extends ListFragment {
 					builder2.setPositiveButton("Yes", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							Toast.makeText(getActivity(), "Override Save: " + productId + " " + styleId,  Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), "Override Save: " + productId + " " + 
+									ZapposSaleFragment.mProducts.get(position).getStyleId(), Toast.LENGTH_SHORT).show();
 							saveProductStartService(position);
 						}
 					});
@@ -88,6 +88,7 @@ public class ZapposProductListFragment extends ListFragment {
 		editor.putString(PRODUCT_ID, ZapposSaleFragment.mProducts.get(position).getProductId());
 		editor.putString(STYLE_ID, ZapposSaleFragment.mProducts.get(position).getStyleId());
 		editor.commit();
+		styleId = ZapposSaleFragment.mProducts.get(position).getStyleId();
 		ProductService.setServiceAlarm(getActivity());
 	}
 	
