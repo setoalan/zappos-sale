@@ -11,6 +11,7 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -25,12 +26,13 @@ import android.widget.Toast;
 
 public class ZapposProductListFragment extends ListFragment {
 	
-	public static final String PREF_SALE = "sale";
+	public static final String PRODUCT_ID = "productId";
+	public static final String STYLE_ID = "styleId";
 	
 	ZapposAdapter adapter;
 	SharedPreferences sharedPref;
 	SharedPreferences.Editor editor;
-	String productId, styleId;
+	public static String productId, styleId;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class ZapposProductListFragment extends ListFragment {
 		adapter = new ZapposAdapter(ZapposSaleFragment.mProducts);
 		setListAdapter(adapter);
 		sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-		productId = sharedPref.getString("productId", null);
-		styleId = sharedPref.getString("styleId", null);
+		productId = sharedPref.getString(PRODUCT_ID, null);
+		styleId = sharedPref.getString(STYLE_ID, null);
 	}
 	
 	@Override
@@ -51,18 +53,17 @@ public class ZapposProductListFragment extends ListFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (productId == null || styleId == null) {
-					Toast.makeText(getActivity(), "New Saved", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "New Save: " + productId + " " + styleId, Toast.LENGTH_SHORT).show();
+					saveProductStartService(position);
 				} else {
 					AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
-					builder2.setTitle("Are you sure you want to override current saved product?");
+					builder2.setTitle("Are you sure you want to override current saved product?" +
+							"\nProduct Id: " + productId + "\t" + "Style Id: " + styleId);
 					builder2.setPositiveButton("Yes", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							Toast.makeText(getActivity(), "Saved: " + productId + " " + styleId,  Toast.LENGTH_SHORT).show();
-							editor = sharedPref.edit();
-							editor.putString("productId", ZapposSaleFragment.mProducts.get(position).getProductId());
-							editor.putString("styleId", ZapposSaleFragment.mProducts.get(position).getStyleId());
-							editor.commit();
+							Toast.makeText(getActivity(), "Override Save: " + productId + " " + styleId,  Toast.LENGTH_SHORT).show();
+							saveProductStartService(position);
 						}
 					});
 					builder2.setNegativeButton("NO", new OnClickListener() {
@@ -72,8 +73,6 @@ public class ZapposProductListFragment extends ListFragment {
 					AlertDialog dialog2 = builder2.create();
 					dialog2.show();
 				}
-				//Intent i = new Intent(getActivity(), ProductService.class);
-				//getActivity().startService(i);
 			}
 		});
 		builder.setNegativeButton("Cancel", new OnClickListener() {
@@ -82,6 +81,14 @@ public class ZapposProductListFragment extends ListFragment {
 		});
 		AlertDialog dialog = builder.create();
 		dialog.show();
+	}
+	
+	private void saveProductStartService(int position) {
+		editor = sharedPref.edit();
+		editor.putString(PRODUCT_ID, ZapposSaleFragment.mProducts.get(position).getProductId());
+		editor.putString(STYLE_ID, ZapposSaleFragment.mProducts.get(position).getStyleId());
+		editor.commit();
+		ProductService.setServiceAlarm(getActivity());
 	}
 	
 	private class ZapposAdapter extends ArrayAdapter<Product> {
