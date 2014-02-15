@@ -1,6 +1,5 @@
 package com.setoalan.zappossale;
 
-
 public class Product {
 
 	private String mProductId;

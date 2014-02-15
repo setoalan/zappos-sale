@@ -31,8 +31,6 @@ public class ItemFetcher {
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
 		
-		Log.i(TAG, url);
-		
 		String result = null;
 		
 		try {
@@ -41,6 +39,7 @@ public class ItemFetcher {
 			final HttpUriRequest request = new HttpGet(url);
 		
 			final HttpResponse response = httpclient.execute(request);
+			
 			final StatusLine status = response.getStatusLine();
 			
 			if (status.getStatusCode() == HttpStatus.SC_OK) {
@@ -49,7 +48,6 @@ public class ItemFetcher {
 				try {
 					response.getEntity().writeTo(out);
 					result = out.toString();
-					//Log.i(TAG, result);
 				} finally {
 					out.close();
 				}
@@ -69,22 +67,17 @@ public class ItemFetcher {
 
 	private Void deserialize(String result) {
 		try {
-			if (result == null)
-				return null;
+			if (result == null) return null;
 			JSONObject obj = new JSONObject(result);
 			String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(0).getString("percentOff");
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
-				Log.i(TAG, "SEND EMAIL");
-				// Send email & turn off alarmManager
+				Log.i(TAG, "Send email");
 				if (ProductService.am == null || ProductService.pi == null) return null;
 				ProductService.am.cancel(ProductService.pi);
 				ProductService.pi.cancel();
-				
 				new EmailTask().execute();
-				
 			} else {
-				Log.i(TAG, "NOT ON SALE");
-				// Do nothing
+				Log.i(TAG, "Not on sale");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

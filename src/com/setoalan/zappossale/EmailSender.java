@@ -26,20 +26,14 @@ public class EmailSender extends javax.mail.Authenticator {
 	
 	private String mUser;
 	private String mPassword;
-	
 	private String[] mTo;
 	private String mFrom;
-	
 	private String mPort;
 	private String mSPort;
-	
 	private String mHost;
-	
 	private String mSubject;
 	private String mBody;
-	
 	private boolean mAuth;
-	
 	private boolean mDebuggable;
 	private Multipart mMultipart;
 	
@@ -50,14 +44,13 @@ public class EmailSender extends javax.mail.Authenticator {
 			String[] toArr = {"seto.alan@yahoo.com"};
 			m.setTo(toArr);
 			m.setFrom("aseto@umich.edu");
-			m.setSubject("SALE ON YOUR ITEM");
-			m.setBody("YOUR ITEM IS ON SALE");
+			m.setSubject("Your saved item is now on sale!");
+			m.setBody("Your item is on sale.");
 			
-			if(m.send()) { 
+			if(m.send())
 				Log.i(TAG, "Email was sent successfully.");
-			} else { 
+			else 
 				Log.i(TAG, "Email was not sent.");
-			}
 		} catch (AddressException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
@@ -71,16 +64,13 @@ public class EmailSender extends javax.mail.Authenticator {
 		mHost = "smtp.gmail.com";
 		mPort = "465";
 		mSPort = "465";
-		
 		mUser = "";
 		mPassword = "";
 		mFrom = "";
 		mSubject = "";
 		mBody = "";
-		
 		mDebuggable = false;
 		mAuth = true;
-		
 		mMultipart = new MimeMultipart();
 		
 	    MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap(); 
@@ -113,11 +103,11 @@ public class EmailSender extends javax.mail.Authenticator {
 				addressTo[i] = new InternetAddress(mTo[i]);
 			
 			msg.setRecipients(MimeMessage.RecipientType.TO, addressTo);
-			msg.setSubject("Subject");
+			msg.setSubject("Zappos - Your saved item is on sale!");
 			msg.setSentDate(new Date());
 			
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText("BODY");
+			messageBodyPart.setText("Your saved item is on sale!");
 			mMultipart.addBodyPart(messageBodyPart);
 			
 			msg.setContent(mMultipart);

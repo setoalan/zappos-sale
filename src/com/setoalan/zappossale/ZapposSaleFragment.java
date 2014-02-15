@@ -24,6 +24,7 @@ public class ZapposSaleFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_zappos_sale, container, false);
+		
 		mProduct = (EditText) v.findViewById(R.id.product);
 		mSearch = (Button) v.findViewById(R.id.search);
 		mSearch.setOnClickListener(new OnClickListener() {

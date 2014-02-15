@@ -28,19 +28,21 @@ public class ZapposProductListFragment extends ListFragment {
 	public static final String PRODUCT_ID = "productId";
 	public static final String STYLE_ID = "styleId";
 	
+	public static String productId, styleId;
+	
 	ZapposAdapter adapter;
 	SharedPreferences sharedPref;
 	SharedPreferences.Editor editor;
-	public static String productId, styleId;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new ZapposAdapter(ZapposSaleFragment.mProducts);
-		setListAdapter(adapter);
 		sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 		productId = sharedPref.getString(PRODUCT_ID, null);
 		styleId = sharedPref.getString(STYLE_ID, null);
+		adapter = new ZapposAdapter(ZapposSaleFragment.mProducts);
+		setListAdapter(adapter);
 	}
 	
 	@Override
@@ -66,7 +68,7 @@ public class ZapposProductListFragment extends ListFragment {
 							saveProductStartService(position);
 						}
 					});
-					builder2.setNegativeButton("NO", new OnClickListener() {
+					builder2.setNegativeButton("No", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {}
 					});
@@ -75,7 +77,7 @@ public class ZapposProductListFragment extends ListFragment {
 				}
 			}
 		});
-		builder.setNegativeButton("Cancel", new OnClickListener() {
+		builder.setNegativeButton("No", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {}
 		});
@@ -164,4 +166,5 @@ public class ZapposProductListFragment extends ListFragment {
 			return;
 		}
 	}
+	
 }

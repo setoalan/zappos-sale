@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
-import android.util.Log;
 
 public class ZapposFetcher {
 
@@ -33,8 +32,6 @@ public class ZapposFetcher {
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
 		
-		Log.i(TAG, url);
-		
 		String result = null;
 		
 		try {
@@ -43,6 +40,7 @@ public class ZapposFetcher {
 			final HttpUriRequest request = new HttpGet(url);
 		
 			final HttpResponse response = httpclient.execute(request);
+			
 			final StatusLine status = response.getStatusLine();
 			
 			if (status.getStatusCode() == HttpStatus.SC_OK) {
@@ -51,7 +49,6 @@ public class ZapposFetcher {
 				try {
 					response.getEntity().writeTo(out);
 					result = out.toString();
-					//Log.i(TAG, result);
 				} finally {
 					out.close();
 				}

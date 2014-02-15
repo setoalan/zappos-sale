@@ -12,7 +12,7 @@ import android.util.Log;
 public class ProductService extends IntentService {
 
 	private static final String TAG = "ProductService";
-	private static final int POLL_INTERVAL = 1000 * 10; // 60 seconds
+	private static final int POLL_INTERVAL = 1000 * 60; // 60 seconds
 	
 	public static AlarmManager am;
 	public static PendingIntent pi;
@@ -25,6 +25,7 @@ public class ProductService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		ConnectivityManager cm = (ConnectivityManager)
 				getSystemService(Context.CONNECTIVITY_SERVICE);
+		
 		if (cm.getActiveNetworkInfo() == null) return;
 		
 		Log.i(TAG, "Received an intent: " + intent);
@@ -43,6 +44,7 @@ public class ProductService extends IntentService {
 	
 	public static void setServiceAlarm(Context context) {
 		Intent i  = new Intent(context, ProductService.class);
+		
 		pi = PendingIntent.getService(context, 0, i, 0);
 		
 		am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
