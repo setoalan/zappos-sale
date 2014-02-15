@@ -38,6 +38,7 @@ public class ZapposProductListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ZapposSaleFragment.mProgressContainer.setVisibility(View.INVISIBLE);
 		sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 		productId = sharedPref.getString(PRODUCT_ID, null);
 		styleId = sharedPref.getString(STYLE_ID, null);
@@ -48,7 +49,8 @@ public class ZapposProductListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, final int position, long id) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Would you like to get a notification when this " +
+		builder.setTitle("Receive Notification?");
+		builder.setMessage("Would you like to get a notification when this " +
 				"product is 20% off or more?");
 		builder.setPositiveButton("Yes", new OnClickListener() {
 			@Override
@@ -58,7 +60,8 @@ public class ZapposProductListFragment extends ListFragment {
 					saveProductStartService(position);
 				} else {
 					AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
-					builder2.setTitle("Are you sure you want to override current saved product?" +
+					builder2.setTitle("Override current product?");
+					builder2.setMessage("Are you sure you want to override current saved product?" +
 							"\nProduct Id: " + productId + "\t" + "Style Id: " + styleId);
 					builder2.setPositiveButton("Yes", new OnClickListener() {
 						@Override
@@ -165,6 +168,7 @@ public class ZapposProductListFragment extends ListFragment {
 			
 			return;
 		}
+		
 	}
 	
 }

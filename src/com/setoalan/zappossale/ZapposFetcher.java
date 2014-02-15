@@ -27,7 +27,7 @@ public class ZapposFetcher {
 	private ArrayList<Product> mProducts = new ArrayList<Product>();
 	
 	public ArrayList<Product> fetchItems()  {
-		String url = Uri.parse(URL + "7515478" + "?").buildUpon()
+		String url = Uri.parse(URL + ZapposSaleFragment.PRODUCT + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();

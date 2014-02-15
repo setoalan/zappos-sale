@@ -11,5 +11,8 @@
     <string name="product_name">Product Name</string>
     <string name="style_id">Style Id</string>
     <string name="percent_off">Percent Off</string>
+    <string name="zappos_logo">Zappos Logo</string>
+    <string name="email">Enter email.</string>
+    <string name="front_text">Would you like to get an email notification when your item is 20% off or more?</string>
 
 </resources>

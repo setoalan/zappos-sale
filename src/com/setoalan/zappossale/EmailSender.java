@@ -19,7 +19,6 @@ import javax.mail.internet.MimeMultipart;
 
 import android.util.Log;
 
-
 public class EmailSender extends javax.mail.Authenticator {
 	
 	public static final String TAG = "EmailSender";
@@ -41,7 +40,7 @@ public class EmailSender extends javax.mail.Authenticator {
 		try {
 			EmailSender m = new EmailSender("aseto@umich.edu", "==");
 			
-			String[] toArr = {"seto.alan@yahoo.com"};
+			String[] toArr = { ZapposSaleFragment.EMAIL };
 			m.setTo(toArr);
 			m.setFrom("aseto@umich.edu");
 			m.setSubject("Your saved item is now on sale!");
