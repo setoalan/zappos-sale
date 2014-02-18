@@ -32,12 +32,14 @@ public class ProductGalleryFragment extends Fragment {
 	
 	GridView mGridView;
 	GalleryItemAdapter adapter;
+	public static DesiredProducts db;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		ZapposSaleFragment.mProgressContainer.setVisibility(View.INVISIBLE);;
+		ZapposSaleFragment.mProgressContainer.setVisibility(View.INVISIBLE);
+		db = new DesiredProducts(getActivity());
 	}
 	
 	@Override
@@ -60,6 +62,7 @@ public class ProductGalleryFragment extends Fragment {
 	}
 	
 	private void displayDialog(final int position) {
+		db.getProductCount();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View v = inflater.inflate(R.layout.dialog_product, null);
@@ -83,6 +86,7 @@ public class ProductGalleryFragment extends Fragment {
 	}
 	
 	private void saveProductStartService(int position) {
+		db.addProduct(position);
 		styleId = ZapposSaleFragment.mProducts.get(position).getStyleId();
 		ProductService.setServiceAlarm(getActivity());
 	}

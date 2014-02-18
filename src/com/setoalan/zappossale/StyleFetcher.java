@@ -14,7 +14,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class StyleFetcher {
@@ -23,9 +27,18 @@ public class StyleFetcher {
 	
 	private static final String URL = "http://api.zappos.com/Product/styleId/";
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
+	
+	private Context mContext;
+	private Product mProduct;
+	
+	public StyleFetcher(Product product) {
+		mProduct = product;
+	}
 
-	public Void fetchItems()  {
-		String url = Uri.parse(URL + ProductGalleryFragment.styleId + "?").buildUpon()
+	public Void fetchItems(Context context)  {
+		mContext = context;
+		
+		String url = Uri.parse(URL + mProduct.getStyleId() + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
@@ -63,7 +76,6 @@ public class StyleFetcher {
 		return deserialize(result);
 	}
 
-
 	private Void deserialize(String result) {
 		try {
 			if (result == null) return null;
@@ -72,9 +84,14 @@ public class StyleFetcher {
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
 				Log.i(TAG, "Notification that is on sale");
 				if (ProductService.am == null || ProductService.pi == null) return null;
-				ProductService.am.cancel(ProductService.pi);
-				ProductService.pi.cancel();
-				//NOTIFICATION
+				showNotification();
+				ProductGalleryFragment.db.deleteProduct(Integer.parseInt(ProductGalleryFragment.styleId));
+				if (ProductGalleryFragment.db.getProductCount() == 0) {
+					Log.i(TAG, "Service Stopped");
+					ProductService.am.cancel(ProductService.pi);
+					ProductService.pi.cancel();
+				}
+				
 			} else {
 				Log.i(TAG, "Not on sale");
 			}
@@ -84,4 +101,17 @@ public class StyleFetcher {
 		return null;
 	}
 
+	private void showNotification() {
+		Notification notification = new NotificationCompat.Builder(mContext)
+	        .setTicker("TICKER")
+	        .setContentTitle("TITLE")
+	        .setContentText("TEXT")
+	        .setAutoCancel(true)
+	        .build();
+		
+		NotificationManager notificationManager = (NotificationManager)
+				mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		notificationManager.notify(0, notification);
+	}
 }

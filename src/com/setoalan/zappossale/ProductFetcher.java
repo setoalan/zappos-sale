@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
-import android.util.Log;
 
 public class ProductFetcher {
 
@@ -32,9 +31,6 @@ public class ProductFetcher {
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
-		
-		
-		Log.i(TAG, url);
 		
 		String result = null;
 		

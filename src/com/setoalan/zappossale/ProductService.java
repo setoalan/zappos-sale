@@ -1,5 +1,7 @@
 package com.setoalan.zappossale;
 
+import java.util.List;
+
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -12,10 +14,11 @@ import android.util.Log;
 public class ProductService extends IntentService {
 
 	private static final String TAG = "ProductService";
-	private static final int POLL_INTERVAL = 1000 * 60; // 60 seconds
+	private static final int POLL_INTERVAL = 1000 * 10; // 10 seconds
 	
 	public static AlarmManager am;
 	public static PendingIntent pi;
+	static Context mContext;
 	
 	public ProductService() {
 		super(TAG);
@@ -30,19 +33,31 @@ public class ProductService extends IntentService {
 		
 		Log.i(TAG, "Received an intent: " + intent);
 		
-		new FetchItemTask().execute();
+		List<Product> products = ProductGalleryFragment.db.getAllProducts();
+		for (Product p : products) {
+			Log.i(p.getProductId(), p.getStyleId());
+			new FetchItemTask(mContext, p).execute();
+		}
 	}
 	
 	private class FetchItemTask extends AsyncTask<Void, Void, Void> {
 
+		Product mProduct;
+		
+		public FetchItemTask(Context context, Product p) {
+			mProduct = p;
+		}
+
 		@Override
 		protected Void doInBackground(Void... params) {
-			return new StyleFetcher().fetchItems();
+			return new StyleFetcher(mProduct).fetchItems(mContext);
 		}
 		
 	}
 	
 	public static void setServiceAlarm(Context context) {
+		mContext = context;
+		
 		Intent i  = new Intent(context, ProductService.class);
 		
 		pi = PendingIntent.getService(context, 0, i, 0);
