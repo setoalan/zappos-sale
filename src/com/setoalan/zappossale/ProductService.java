@@ -18,12 +18,18 @@ public class ProductService extends IntentService {
 	
 	public static AlarmManager am;
 	public static PendingIntent pi;
-	static Context mContext;
+	
+	private static Context mContext;
 	
 	public ProductService() {
 		super(TAG);
 	}
 
+	@Override
+	public void onCreate() {
+		super.onCreate();
+	}
+	
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		ConnectivityManager cm = (ConnectivityManager)
@@ -33,10 +39,10 @@ public class ProductService extends IntentService {
 		
 		Log.i(TAG, "Received an intent: " + intent);
 		
-		List<Product> products = ProductGalleryFragment.db.getAllProducts();
+		List<Product> products = ZapposSaleFragment.db.getAllProducts();
 		for (Product p : products) {
 			Log.i(p.getProductId(), p.getStyleId());
-			new FetchItemTask(mContext, p).execute();
+			new FetchItemTask(p).execute();
 		}
 	}
 	
@@ -44,13 +50,13 @@ public class ProductService extends IntentService {
 
 		Product mProduct;
 		
-		public FetchItemTask(Context context, Product p) {
+		public FetchItemTask(Product p) {
 			mProduct = p;
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			return new StyleFetcher(mProduct).fetchItems(mContext);
+			return new StyleFetcher(mContext, mProduct).fetchItems();
 		}
 		
 	}

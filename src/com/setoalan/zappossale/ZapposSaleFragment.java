@@ -16,17 +16,25 @@ import android.widget.Toast;
 
 public class ZapposSaleFragment extends Fragment {
 
-	public static ArrayList<Product> mProducts = new ArrayList<Product>();
-	
-	public static String PRODUCT = "7515478";
-	
+	public static ArrayList<Product> mProducts;
+	public static String PRODUCT;// = "7515478";
 	public static View mProgressContainer;
+	public static DesiredProducts db;
 	private EditText mProduct;
 	private Button mSearch;
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mProducts = new ArrayList<Product>();
+		db = new DesiredProducts(getActivity());
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		getActivity().getActionBar().setIcon(R.drawable.zappos_logo_square);
+		
 		View v = inflater.inflate(R.layout.fragment_zappos_sale, container, false);
 		
 		mProduct = (EditText) v.findViewById(R.id.product);
@@ -38,6 +46,7 @@ public class ZapposSaleFragment extends Fragment {
 					Toast.makeText(getActivity(), "Please enter a productID or productName", Toast.LENGTH_SHORT).show();
 				} else {
 					mProgressContainer.setVisibility(View.VISIBLE);
+					PRODUCT = mProduct.getText().toString();
 					new FetchItemsTask().execute();
 				}
 			}

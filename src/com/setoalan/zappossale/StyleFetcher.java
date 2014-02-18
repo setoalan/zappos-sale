@@ -16,27 +16,28 @@ import org.json.JSONObject;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class StyleFetcher {
 	
-	public static final String TAG = "ItemFetcher";
-	
+	private static final String TAG = "ItemFetcher";
 	private static final String URL = "http://api.zappos.com/Product/styleId/";
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
 	
 	private Context mContext;
 	private Product mProduct;
 	
-	public StyleFetcher(Product product) {
+	public StyleFetcher(Context context, Product product) {
+		mContext = context;
 		mProduct = product;
 	}
 
-	public Void fetchItems(Context context)  {
-		mContext = context;
+	public Void fetchItems()  {
 		
 		String url = Uri.parse(URL + mProduct.getStyleId() + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
@@ -84,14 +85,13 @@ public class StyleFetcher {
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
 				Log.i(TAG, "Notification that is on sale");
 				if (ProductService.am == null || ProductService.pi == null) return null;
-				showNotification();
-				ProductGalleryFragment.db.deleteProduct(Integer.parseInt(ProductGalleryFragment.styleId));
-				if (ProductGalleryFragment.db.getProductCount() == 0) {
+				showNotification(mContext, obj);
+				ZapposSaleFragment.db.deleteProduct(Integer.parseInt(ProductGalleryFragment.styleId));
+				if (ZapposSaleFragment.db.getProductCount() == 0) {
 					Log.i(TAG, "Service Stopped");
 					ProductService.am.cancel(ProductService.pi);
 					ProductService.pi.cancel();
 				}
-				
 			} else {
 				Log.i(TAG, "Not on sale");
 			}
@@ -101,17 +101,33 @@ public class StyleFetcher {
 		return null;
 	}
 
-	private void showNotification() {
-		Notification notification = new NotificationCompat.Builder(mContext)
-	        .setTicker("TICKER")
-	        .setContentTitle("TITLE")
-	        .setContentText("TEXT")
-	        .setAutoCancel(true)
-	        .build();
-		
-		NotificationManager notificationManager = (NotificationManager)
-				mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		notificationManager.notify(0, notification);
+	private void showNotification(Context context, JSONObject obj) {
+		try {
+			String productName = obj.getJSONArray("product").getJSONObject(0).getString("productName");
+			String brandName = obj.getJSONArray("product").getJSONObject(0).getString("brandName");
+			String color = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(0).getString("color");
+			String productUrl = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(0).getString("productUrl");
+			
+			Uri pageUri = Uri.parse(productUrl);
+			Intent intent = new Intent(Intent.ACTION_VIEW, pageUri);
+			PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
+			
+			Notification notification = new NotificationCompat.Builder(mContext)
+		        .setTicker("A saved Zappos product is on sale!")
+		        .setSmallIcon(R.drawable.zappos_logo_square)
+		        .setContentTitle("Zappos product is on sale.")
+		        .setContentText("Your saved item of " + color + " " + brandName + " " + productName + " is 20% off or more RIGHT NOW!")
+		        .setContentIntent(pIntent)
+		        .setAutoCancel(true)
+		        .build();
+
+			NotificationManager notificationManager = (NotificationManager)
+					mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+			notificationManager.notify(0, notification);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
+	
 }

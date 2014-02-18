@@ -10,7 +10,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,20 +34,24 @@ public class ProductGalleryFragment extends Fragment {
 	
 	GridView mGridView;
 	GalleryItemAdapter adapter;
-	public static DesiredProducts db;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		ZapposSaleFragment.mProgressContainer.setVisibility(View.INVISIBLE);
-		db = new DesiredProducts(getActivity());
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		getActivity().getActionBar().setTitle(ZapposSaleFragment.mProducts.get(0).getBrandName() +
+			" " + ZapposSaleFragment.mProducts.get(0).getProductName());
+		getActivity().getActionBar().setIcon(R.drawable.zappos_logo_square);
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		View v = inflater.inflate(R.layout.fragment_product_gallery, container, false);
+		
 		
 		mGridView = (GridView) v.findViewById(R.id.gridView);
 		
@@ -62,7 +68,6 @@ public class ProductGalleryFragment extends Fragment {
 	}
 	
 	private void displayDialog(final int position) {
-		db.getProductCount();
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View v = inflater.inflate(R.layout.dialog_product, null);
@@ -80,13 +85,21 @@ public class ProductGalleryFragment extends Fragment {
 				saveProductStartService(position);
 			}
 		});
+		builder.setNeutralButton("View on Website", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Uri pageUri = Uri.parse(ZapposSaleFragment.mProducts.get(position).getProductUrl());
+				Intent intent = new Intent(Intent.ACTION_VIEW, pageUri);
+				startActivity(intent);
+			}
+		});
 		builder.setNegativeButton("No", null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
 	
 	private void saveProductStartService(int position) {
-		db.addProduct(position);
+		ZapposSaleFragment.db.addProduct(position);
 		styleId = ZapposSaleFragment.mProducts.get(position).getStyleId();
 		ProductService.setServiceAlarm(getActivity());
 	}

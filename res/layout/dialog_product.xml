@@ -18,7 +18,7 @@
 		    android:layout_height="100dp"
 		    android:adjustViewBounds="true"
 		    android:scaleType="centerCrop"
-		    android:contentDescription="@string/product_image"/>
+		    android:contentDescription="@string/product_image" />
     
 	</LinearLayout>    
 	    
@@ -99,7 +99,7 @@
 		<TextView
 		    android:id="@+id/style_id"
 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"/>
+		    android:layout_height="wrap_content" />
 		
 		<TextView
 		    android:id="@+id/color"
