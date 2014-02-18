@@ -27,10 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ProductGalleryFragment extends Fragment {
-
-	public static final String PRODUCT_ID = "productId";
-	public static final String STYLE_ID = "styleId";
-	public static String styleId;
 	
 	GridView mGridView;
 	GalleryItemAdapter adapter;
@@ -45,8 +41,7 @@ public class ProductGalleryFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getActivity().getActionBar().setTitle(ZapposSaleFragment.mProducts.get(0).getBrandName() +
-			" " + ZapposSaleFragment.mProducts.get(0).getProductName());
+		getActivity().getActionBar().setTitle("Search Results");
 		getActivity().getActionBar().setIcon(R.drawable.zappos_logo_square);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		
@@ -80,8 +75,7 @@ public class ProductGalleryFragment extends Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Toast.makeText(getActivity(), "New Save: " + ZapposSaleFragment.mProducts.get(position).getBrandName() +
-						" " + ZapposSaleFragment.mProducts.get(position).getProductName() + " in " +
-						ZapposSaleFragment.mProducts.get(position).getColor(), Toast.LENGTH_SHORT).show();
+						" " + ZapposSaleFragment.mProducts.get(position).getProductName(), Toast.LENGTH_SHORT).show();
 				saveProductStartService(position);
 			}
 		});
@@ -100,7 +94,6 @@ public class ProductGalleryFragment extends Fragment {
 	
 	private void saveProductStartService(int position) {
 		ZapposSaleFragment.db.addProduct(position);
-		styleId = ZapposSaleFragment.mProducts.get(position).getStyleId();
 		ProductService.setServiceAlarm(getActivity());
 	}
 	
@@ -162,21 +155,21 @@ public class ProductGalleryFragment extends Fragment {
 				ImageView iv = (ImageView) mView.findViewById(R.id.product_image);
 				iv.setImageDrawable(mDrawable);
 				
-				TextView tv0 = (TextView) mView.findViewById(R.id.product_id);
-				TextView tv1 = (TextView) mView.findViewById(R.id.product_name);
-				TextView tv2 = (TextView) mView.findViewById(R.id.brand_id);
+				TextView tv0 = (TextView) mView.findViewById(R.id.style_id);
+				TextView tv1 = (TextView) mView.findViewById(R.id.product_id);
+				TextView tv2 = (TextView) mView.findViewById(R.id.color_id);
 				TextView tv3 = (TextView) mView.findViewById(R.id.brand_name);
-				TextView tv4 = (TextView) mView.findViewById(R.id.style_id);
-				TextView tv5 = (TextView) mView.findViewById(R.id.color);
-				TextView tv6 = (TextView) mView.findViewById(R.id.price);
+				TextView tv4 = (TextView) mView.findViewById(R.id.product_name);
+				TextView tv5 = (TextView) mView.findViewById(R.id.price);
+				TextView tv6 = (TextView) mView.findViewById(R.id.original_price);
 				TextView tv7 = (TextView) mView.findViewById(R.id.percent_off);
 				
-				tv0.setText(mProduct.getProductId());
-				tv1.setText(mProduct.getProductName());
-				tv2.setText(mProduct.getBrandId());
+				tv0.setText(mProduct.getStyleId());
+				tv1.setText(mProduct.getProductId());
+				tv2.setText(mProduct.getColorId());
 				tv3.setText(mProduct.getBrandName());
-				tv4.setText(mProduct.getStyleId());
-				tv5.setText(mProduct.getColor());
+				tv4.setText(mProduct.getProductName());
+				tv5.setText(mProduct.getPrice());
 				tv6.setText(mProduct.getOriginalPrice());
 				tv7.setText(mProduct.getPercentOff());
 			}

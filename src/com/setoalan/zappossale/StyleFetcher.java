@@ -81,12 +81,14 @@ public class StyleFetcher {
 		try {
 			if (result == null) return null;
 			JSONObject obj = new JSONObject(result);
-			String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(0).getString("percentOff");
+			String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles")
+					.getJSONObject(0).getString("percentOff");
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
 				Log.i(TAG, "Notification that is on sale");
 				if (ProductService.am == null || ProductService.pi == null) return null;
 				showNotification(mContext, obj);
-				ZapposSaleFragment.db.deleteProduct(Integer.parseInt(ProductGalleryFragment.styleId));
+				ZapposSaleFragment.db.deleteProduct(Integer.parseInt(obj.getJSONArray("product").getJSONObject(0)
+						.getJSONArray("styles").getJSONObject(0).getString("styleId")));
 				if (ZapposSaleFragment.db.getProductCount() == 0) {
 					Log.i(TAG, "Service Stopped");
 					ProductService.am.cancel(ProductService.pi);
@@ -124,7 +126,8 @@ public class StyleFetcher {
 			NotificationManager notificationManager = (NotificationManager)
 					mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-			notificationManager.notify(0, notification);
+			notificationManager.notify(Integer.parseInt(obj.getJSONArray("product").getJSONObject(0)
+					.getJSONArray("styles").getJSONObject(0).getString("styleId")), notification);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

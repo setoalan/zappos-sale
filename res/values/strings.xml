@@ -3,7 +3,7 @@
 
     <string name="app_name">ZapposSale</string>
     <string name="action_settings">Settings</string>
-    <string name="enter">Please enter a productID.</string>
+    <string name="enter">Please enter a search term.</string>
     <string name="search">Search Item</string>
     <string name="product_image">Product Image</string>
     <string name="product_id">Product Id</string>
@@ -11,9 +11,10 @@
     <string name="brand_id">Brand Id</string>
     <string name="brand_name">Brand Name</string>
     <string name="style_id">Style Id</string>
-    <string name="color">Color</string>
+    <string name="color_id">Color Id</string>
     <string name="price">Price</string>
     <string name="percent_off">Percent Off</string>
+    <string name="original_price">Original Price</string>
     <string name="zappos_logo">Zappos Logo</string>
     <string name="front_text">Would you like to get a notification when a product is 20% off or more?</string>
 

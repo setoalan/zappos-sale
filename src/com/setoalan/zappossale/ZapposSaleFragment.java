@@ -17,10 +17,10 @@ import android.widget.Toast;
 public class ZapposSaleFragment extends Fragment {
 
 	public static ArrayList<Product> mProducts;
-	public static String PRODUCT;// = "7515478";
+	public static String SEARCH_WORD;// = "7515478";
 	public static View mProgressContainer;
 	public static DesiredProducts db;
-	private EditText mProduct;
+	private EditText mSearchWord;
 	private Button mSearch;
 	
 	@Override
@@ -37,16 +37,16 @@ public class ZapposSaleFragment extends Fragment {
 		
 		View v = inflater.inflate(R.layout.fragment_zappos_sale, container, false);
 		
-		mProduct = (EditText) v.findViewById(R.id.product);
+		mSearchWord = (EditText) v.findViewById(R.id.search_word);
 		mSearch = (Button) v.findViewById(R.id.search);
 		mSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mProduct.getText().toString().equals("")) {
-					Toast.makeText(getActivity(), "Please enter a productID or productName", Toast.LENGTH_SHORT).show();
+				if (mSearchWord.getText().toString().equals("")) {
+					Toast.makeText(getActivity(), "Please enter a search.", Toast.LENGTH_SHORT).show();
 				} else {
 					mProgressContainer.setVisibility(View.VISIBLE);
-					PRODUCT = mProduct.getText().toString();
+					SEARCH_WORD = mSearchWord.getText().toString();
 					new FetchItemsTask().execute();
 				}
 			}
@@ -61,7 +61,7 @@ public class ZapposSaleFragment extends Fragment {
 		
 		@Override
 		protected ArrayList<Product> doInBackground(Void... params) {
-			return new ProductFetcher().fetchItems();
+			return new SearchFetcher().fetchItems();
 		}
 		
 		@Override

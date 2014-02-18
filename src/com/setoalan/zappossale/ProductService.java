@@ -64,7 +64,7 @@ public class ProductService extends IntentService {
 	public static void setServiceAlarm(Context context) {
 		mContext = context;
 		
-		Intent i  = new Intent(context, ProductService.class);
+		Intent i = new Intent(context, ProductService.class);
 		
 		pi = PendingIntent.getService(context, 0, i, 0);
 		
