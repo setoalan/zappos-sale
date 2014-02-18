@@ -37,7 +37,7 @@ public class ProductService extends IntentService {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			return new ItemFetcher().fetchItems();
+			return new StyleFetcher().fetchItems();
 		}
 		
 	}

@@ -7,12 +7,14 @@
     <string name="search">Search Item</string>
     <string name="product_image">Product Image</string>
     <string name="product_id">Product Id</string>
-    <string name="brand_name">Brand Name</string>
     <string name="product_name">Product Name</string>
+    <string name="brand_id">Brand Id</string>
+    <string name="brand_name">Brand Name</string>
     <string name="style_id">Style Id</string>
+    <string name="color">Color</string>
+    <string name="price">Price</string>
     <string name="percent_off">Percent Off</string>
     <string name="zappos_logo">Zappos Logo</string>
-    <string name="email">Enter email.</string>
     <string name="front_text">Would you like to get an email notification when your item is 20% off or more?</string>
 
 </resources>

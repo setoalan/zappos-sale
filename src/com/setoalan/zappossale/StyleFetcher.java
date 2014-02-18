@@ -15,10 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 
-public class ItemFetcher {
+public class StyleFetcher {
 	
 	public static final String TAG = "ItemFetcher";
 	
@@ -26,7 +25,7 @@ public class ItemFetcher {
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
 
 	public Void fetchItems()  {
-		String url = Uri.parse(URL + ZapposProductListFragment.styleId + "?").buildUpon()
+		String url = Uri.parse(URL + ProductGalleryFragment.styleId + "?").buildUpon()
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
@@ -71,11 +70,11 @@ public class ItemFetcher {
 			JSONObject obj = new JSONObject(result);
 			String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(0).getString("percentOff");
 			if (Integer.parseInt(percentOff.replace("%", "")) >= 20) {
-				Log.i(TAG, "Send email");
+				Log.i(TAG, "Notification that is on sale");
 				if (ProductService.am == null || ProductService.pi == null) return null;
 				ProductService.am.cancel(ProductService.pi);
 				ProductService.pi.cancel();
-				new EmailTask().execute();
+				//NOTIFICATION
 			} else {
 				Log.i(TAG, "Not on sale");
 			}
@@ -83,15 +82,6 @@ public class ItemFetcher {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	private class EmailTask extends AsyncTask<Void, Void, Void> {
-		
-		@Override
-		protected Void doInBackground(Void... params) {					
-			return new EmailSender().initalize();
-		}
-		
 	}
 
 }

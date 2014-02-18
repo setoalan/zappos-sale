@@ -16,8 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.util.Log;
 
-public class ZapposFetcher {
+public class ProductFetcher {
 
 	public static final String TAG = "ZapposFetcher";
 	
@@ -31,6 +32,9 @@ public class ZapposFetcher {
 				.appendQueryParameter("includes", "[\"styles\"]")
 				.appendQueryParameter("key", API_KEY)
 				.build().toString();
+		
+		
+		Log.i(TAG, url);
 		
 		String result = null;
 		
@@ -75,17 +79,29 @@ public class ZapposFetcher {
 				mZP = new Product();
 				
 				String productId = obj.getJSONArray("product").getJSONObject(0).getString("productId");
-				String brandName = obj.getJSONArray("product").getJSONObject(0).getString("brandName");
 				String productName = obj.getJSONArray("product").getJSONObject(0).getString("productName");
+				String brandId= obj.getJSONArray("product").getJSONObject(0).getString("brandId");
+				String brandName = obj.getJSONArray("product").getJSONObject(0).getString("brandName");
+				String defaultProductUrl = obj.getJSONArray("product").getJSONObject(0).getString("defaultProductUrl");
+				String defaultImageUrl = obj.getJSONArray("product").getJSONObject(0).getString("defaultImageUrl");
 				String styleId = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("styleId");
+				String color = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("color");
+				String originalPrice = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("originalPrice");
 				String percentOff = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("percentOff");
+				String productUrl = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("productUrl");
 				String imageUrl = obj.getJSONArray("product").getJSONObject(0).getJSONArray("styles").getJSONObject(i).getString("imageUrl");
 			
 				mZP.setProductId(productId);
-				mZP.setBrandName(brandName);
 				mZP.setProductName(productName);
+				mZP.setBrandId(brandId);
+				mZP.setBrandName(brandName);
+				mZP.setDefaultProductUrl(defaultProductUrl);
+				mZP.setDefaultImageUrl(defaultImageUrl);
 				mZP.setStyleId(styleId);
+				mZP.setColor(color);
+				mZP.setOriginalPrice(originalPrice);
 				mZP.setPercentOff(percentOff);
+				mZP.setProductUrl(productUrl);
 				mZP.setImageUrl(imageUrl);
 				
 				mProducts.add(mZP);
