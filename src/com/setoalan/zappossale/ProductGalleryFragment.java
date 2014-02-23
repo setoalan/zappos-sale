@@ -29,7 +29,6 @@ import android.widget.Toast;
 public class ProductGalleryFragment extends Fragment {
 	
 	GridView mGridView;
-	GalleryItemAdapter adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,6 @@ public class ProductGalleryFragment extends Fragment {
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		View v = inflater.inflate(R.layout.fragment_product_gallery, container, false);
-		
 		
 		mGridView = (GridView) v.findViewById(R.id.gridView);
 		
@@ -74,8 +72,9 @@ public class ProductGalleryFragment extends Fragment {
 		builder.setPositiveButton("Yes", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(getActivity(), "New Save: " + ZapposSaleFragment.mProducts.get(position).getBrandName() +
-						" " + ZapposSaleFragment.mProducts.get(position).getProductName(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "New Save: " +
+						ZapposSaleFragment.mProducts.get(position).getBrandName() + " " +
+						ZapposSaleFragment.mProducts.get(position).getProductName(), Toast.LENGTH_SHORT).show();
 				saveProductStartService(position);
 			}
 		});
@@ -153,8 +152,6 @@ public class ProductGalleryFragment extends Fragment {
 				iv.setImageDrawable(mDrawable);
 			} else {
 				ImageView iv = (ImageView) mView.findViewById(R.id.product_image);
-				iv.setImageDrawable(mDrawable);
-				
 				TextView tv0 = (TextView) mView.findViewById(R.id.style_id);
 				TextView tv1 = (TextView) mView.findViewById(R.id.product_id);
 				TextView tv2 = (TextView) mView.findViewById(R.id.color_id);
@@ -164,6 +161,7 @@ public class ProductGalleryFragment extends Fragment {
 				TextView tv6 = (TextView) mView.findViewById(R.id.original_price);
 				TextView tv7 = (TextView) mView.findViewById(R.id.percent_off);
 				
+				iv.setImageDrawable(mDrawable);
 				tv0.setText(mProduct.getStyleId());
 				tv1.setText(mProduct.getProductId());
 				tv2.setText(mProduct.getColorId());

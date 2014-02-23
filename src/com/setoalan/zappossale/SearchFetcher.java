@@ -20,8 +20,6 @@ import android.net.Uri;
 
 public class SearchFetcher {
 
-	public static final String TAG = "ZapposFetcher";
-	
 	private static final String URL = "http://api.zappos.com/Search?term=";
 	private static final String API_KEY = "a73121520492f88dc3d33daf2103d7574f1a3166";
 	
@@ -69,12 +67,10 @@ public class SearchFetcher {
 
 	private ArrayList<Product> deserialize(String result) {
 		try {
-			Product mZP;
-					
 			JSONObject obj = new JSONObject(result);
 			
 			for (int i=0; i<Integer.parseInt(obj.getString("currentResultCount")); i++) {
-				mZP = new Product();
+				Product mZP = new Product();
 				
 				String styleId = obj.getJSONArray("results").getJSONObject(i).getString("styleId");
 				String productId = obj.getJSONArray("results").getJSONObject(i).getString("productId");

@@ -33,6 +33,7 @@ public final class DesiredProducts extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(SQL_CREATE);
 	}
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(SQL_DELETE);
@@ -56,8 +57,7 @@ public final class DesiredProducts extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, new String[] {
 				KEY_ID, PRODUCT_ID, STYLE_ID }, STYLE_ID + "=?",
 				new String[] { String.valueOf(style_id) }, null, null, null, null);
-		if (cursor != null)
-			cursor.moveToFirst();
+		if (cursor != null) cursor.moveToFirst();
 		
 		Product product = new Product();
 		product.setProductId(cursor.getString(1));

@@ -17,17 +17,25 @@ import android.widget.Toast;
 public class ZapposSaleFragment extends Fragment {
 
 	public static ArrayList<Product> mProducts;
-	public static String SEARCH_WORD;// = "7515478";
+	public static String SEARCH_WORD;
 	public static View mProgressContainer;
 	public static DesiredProducts db;
-	private EditText mSearchWord;
-	private Button mSearch;
+	
+	EditText mSearchWord;
+	Button mSearch;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mProducts = new ArrayList<Product>();
 		db = new DesiredProducts(getActivity());
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (mProducts != null)
+			mProducts.clear();
 	}
 	
 	@Override

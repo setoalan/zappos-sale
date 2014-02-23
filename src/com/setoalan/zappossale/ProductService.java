@@ -15,19 +15,13 @@ public class ProductService extends IntentService {
 
 	private static final String TAG = "ProductService";
 	private static final int POLL_INTERVAL = 1000 * 10; // 10 seconds
+	private static Context mContext;
 	
 	public static AlarmManager am;
 	public static PendingIntent pi;
 	
-	private static Context mContext;
-	
 	public ProductService() {
 		super(TAG);
-	}
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
 	}
 	
 	@Override
